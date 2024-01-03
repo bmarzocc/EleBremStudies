@@ -283,6 +283,7 @@ class BremDumper : public edm::one::EDAnalyzer<edm::one::SharedResources>
       std::vector<int> electron_bremRing; 
       std::vector<int> electron_nCloseJets;
       std::vector<int> electron_nClosePhotons;
+      std::vector<int> electron_nCloseMuons;
       std::vector<int> electron_refinedSCNPFClusters;
       std::vector<int> electron_refinedSCNXtals; 
       std::vector<bool> electron_isEB;
@@ -422,16 +423,6 @@ class BremDumper : public edm::one::EDAnalyzer<edm::one::SharedResources>
       std::vector<int> electron_egmMVAElectronIDloose;
       std::vector<int> electron_egmMVAElectronIDmedium;
       std::vector<int> electron_egmMVAElectronIDtight;
-      std::vector<float> electron_closePhotonP;  
-      std::vector<float> electron_closePhotonEnergy;  
-      std::vector<float> electron_closePhotonRefinedSCEnergy;
-      std::vector<float> electron_closePhotonRefinedSCRawEnergy;
-      std::vector<float> electron_closePhotonSeedRawEnergy;   
-      std::vector<float> electron_closePhotonEt;  
-      std::vector<float> electron_closePhotonEta;
-      std::vector<float> electron_closePhotonPhi;     
-      std::vector<float> electron_closePhotonDR;   
-      std::vector<int> electron_closePhotonRefinedSCNPFClusters;  
       
       std::pair<std::vector<std::vector<float>>,std::vector<std::pair<DetId,float>>>* scClusterInfos;
       std::vector<std::pair<DetId, float>> hitsAndEnergies;

@@ -433,6 +433,7 @@ void BremDumper::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
    electron_bremRing.clear();
    electron_nCloseJets.clear(); 
    electron_nClosePhotons.clear(); 
+   electron_nCloseMuons.clear();  
    electron_refinedSCNPFClusters.clear(); 
    electron_refinedSCNXtals.clear(); 
    electron_isEB.clear();
@@ -568,16 +569,6 @@ void BremDumper::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
    electron_egmMVAElectronIDloose.clear();
    electron_egmMVAElectronIDmedium.clear();
    electron_egmMVAElectronIDtight.clear();
-   electron_closePhotonP.clear(); 
-   electron_closePhotonEnergy.clear(); 
-   electron_closePhotonRefinedSCEnergy.clear(); 
-   electron_closePhotonRefinedSCRawEnergy.clear(); 
-   electron_closePhotonSeedRawEnergy.clear(); 
-   electron_closePhotonEt.clear();  
-   electron_closePhotonEta.clear();
-   electron_closePhotonPhi.clear(); 
-   electron_closePhotonDR.clear();    
-   electron_closePhotonRefinedSCNPFClusters.clear(); 
    
    /*for(const auto& iEle : *(collectionElectrons))
    {
@@ -673,6 +664,7 @@ void BremDumper::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
 
        electron_nCloseJets.push_back(nCloseJets); 
        electron_nClosePhotons.push_back(nClosePhotons);
+       electron_nCloseMuons.push_back(nCloseMuons); 
         
        std::pair<reco::SuperCluster,std::vector<double> > matchedSC;
        if(iEle.isEB()) matchedSC = matchWithSC(&iEle,collectionSuperClustersEB);
@@ -1031,6 +1023,19 @@ void BremDumper::setTree(TTree* tree)
    tree->Branch("electron_eleClusEnergyFraction","std::vector<float>",&electron_eleClusEnergyFraction); 
    tree->Branch("electron_eleClusSharedEnergyFraction","std::vector<float>",&electron_eleClusSharedEnergyFraction); 
    tree->Branch("electron_eleClusMinDR","std::vector<float>",&electron_eleClusMinDR);    
+   tree->Branch("electron_nTrkHits","std::vector<int>",&electron_nTrkHits); 
+   tree->Branch("electron_nTrkValidHits","std::vector<int>",&electron_nTrkValidHits); 
+   tree->Branch("electron_nTrkLostHits","std::vector<int>",&electron_nTrkLostHits); 
+   tree->Branch("electron_nTrkMissingInnerHits","std::vector<int>",&electron_nTrkMissingInnerHits); 
+   tree->Branch("electron_nTrkMissingOuterHits","std::vector<int>",&electron_nTrkMissingOuterHits); 
+   tree->Branch("electron_nTrkAmbiguousHits","std::vector<int>",&electron_nTrkAmbiguousHits);  
+   tree->Branch("electron_nPixelValidHits","std::vector<int>",&electron_nPixelValidHits); 
+   tree->Branch("electron_nPixelLostHits","std::vector<int>",&electron_nPixelLostHits);  
+   tree->Branch("electron_nStripValidHits","std::vector<int>",&electron_nStripValidHits); 
+   tree->Branch("electron_nStripLostHits","std::vector<int>",&electron_nStripLostHits);  
+   tree->Branch("electron_nMuonHits","std::vector<int>",&electron_nMuonHits); 
+   tree->Branch("electron_nMuonValidHits","std::vector<int>",&electron_nMuonValidHits);  
+   tree->Branch("electron_nMuonLostHits","std::vector<int>",&electron_nMuonLostHits);  
    tree->Branch("electron_pt","std::vector<float>",&electron_pt); 
    tree->Branch("electron_pFromEcal","std::vector<float>",&electron_pFromEcal); 
    tree->Branch("electron_pAtVtx","std::vector<float>",&electron_pAtVtx); 
@@ -1074,19 +1079,6 @@ void BremDumper::setTree(TTree* tree)
       tree->Branch("electron_passingPflowPreselection","std::vector<bool>",&electron_passingPflowPreselection); 
       tree->Branch("electron_isAmbiguous","std::vector<bool>",&electron_isAmbiguous); 
       tree->Branch("electron_ambiguousGsfTracksSize","std::vector<int>",&electron_ambiguousGsfTracksSize);  
-      tree->Branch("electron_nTrkHits","std::vector<int>",&electron_nTrkHits); 
-      tree->Branch("electron_nTrkValidHits","std::vector<int>",&electron_nTrkValidHits); 
-      tree->Branch("electron_nTrkLostHits","std::vector<int>",&electron_nTrkLostHits); 
-      tree->Branch("electron_nTrkMissingInnerHits","std::vector<int>",&electron_nTrkMissingInnerHits); 
-      tree->Branch("electron_nTrkMissingOuterHits","std::vector<int>",&electron_nTrkMissingOuterHits); 
-      tree->Branch("electron_nTrkAmbiguousHits","std::vector<int>",&electron_nTrkAmbiguousHits);  
-      tree->Branch("electron_nPixelValidHits","std::vector<int>",&electron_nPixelValidHits); 
-      tree->Branch("electron_nPixelLostHits","std::vector<int>",&electron_nPixelLostHits);  
-      tree->Branch("electron_nStripValidHits","std::vector<int>",&electron_nStripValidHits); 
-      tree->Branch("electron_nStripLostHits","std::vector<int>",&electron_nStripLostHits);  
-      tree->Branch("electron_nMuonHits","std::vector<int>",&electron_nMuonHits); 
-      tree->Branch("electron_nMuonValidHits","std::vector<int>",&electron_nMuonValidHits);  
-      tree->Branch("electron_nMuonLostHits","std::vector<int>",&electron_nMuonLostHits);  
       tree->Branch("electron_pAtSeed","std::vector<float>",&electron_pAtSeed); 
       tree->Branch("electron_pAtSC","std::vector<float>",&electron_pAtSC); 
       tree->Branch("electron_deltaPVtxSeed","std::vector<float>",&electron_deltaPVtxSeed); 
@@ -1106,17 +1098,8 @@ void BremDumper::setTree(TTree* tree)
       tree->Branch("electron_etOutsideMustache","std::vector<float>",&electron_etOutsideMustache); 
       tree->Branch("electron_hadronEnergy","std::vector<float>",&electron_hadronEnergy);
       tree->Branch("electron_nCloseJets","std::vector<int>",&electron_nCloseJets);  
-      tree->Branch("electron_nClosePhotons","std::vector<int>",&electron_nClosePhotons);  
-      tree->Branch("electron_closePhotonP","std::vector<float>",&electron_closePhotonP);  
-      tree->Branch("electron_closePhotonEnergy","std::vector<float>",&electron_closePhotonEnergy); 
-      tree->Branch("electron_closePhotonRefinedSCEnergy","std::vector<float>",&electron_closePhotonRefinedSCEnergy); 
-      tree->Branch("electron_closePhotonRefinedSCRawEnergy","std::vector<float>",&electron_closePhotonRefinedSCRawEnergy); 
-      tree->Branch("electron_closePhotonSeedRawEnergy","std::vector<float>",&electron_closePhotonSeedRawEnergy); 
-      tree->Branch("electron_closePhotonEt","std::vector<float>",&electron_closePhotonEt);  
-      tree->Branch("electron_closePhotonEta","std::vector<float>",&electron_closePhotonEta);  
-      tree->Branch("electron_closePhotonPhi","std::vector<float>",&electron_closePhotonPhi);  
-      tree->Branch("electron_closePhotonDR","std::vector<float>",&electron_closePhotonDR);   
-      tree->Branch("electron_closePhotonRefinedSCNPFClusters","std::vector<int>",&electron_closePhotonRefinedSCNPFClusters); 
+      tree->Branch("electron_nClosePhotons","std::vector<int>",&electron_nClosePhotons);
+      tree->Branch("electron_nCloseMuons","std::vector<int>",&electron_nCloseMuons);  
    }        
 } 
 
