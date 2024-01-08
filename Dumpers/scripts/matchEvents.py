@@ -62,6 +62,7 @@ if __name__ == '__main__':
  outFile = TFile('Skimmed_tree.root','RECREATE')
 
  copyTree = treeIn.CloneTree(0);
+ copyTree.SetName('bremdumper')
  copyTree.SetBranchStatus('*',1)
  for i,event in enumerate(treeIn):
    if i>treeIn.GetEntries():
