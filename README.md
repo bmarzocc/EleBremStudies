@@ -2,13 +2,13 @@
 
 1) Install:
 
-    * scram project CMSSW_13_X_Y
-    * cd CMSSW_13_X_Y/src/
+    * scram project CMSSW_10_6_X
+    * cd CMSSW_10_6_X/src/
     * cmsenv
     * git cms-init
     * git clone git@github.com:bmarzocc/EleBremStudies.git
     * cd EleBremStudies
-    * git checkout 13_X_Y
+    * git checkout 10_6_X
     * cd -
     * scram b -j 5
 

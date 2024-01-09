@@ -31,7 +31,7 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/EgammaCandidates/interface/Conversion.h"
 #include "DataFormats/EgammaCandidates/interface/ConversionFwd.h"
-#include "CommonTools/Egamma/interface/ConversionTools.h" 
+#include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 
 #include "DataFormats/Math/interface/deltaR.h"
 #include "EleBremStudies/Dumpers/plugins/BremFilter.h"
@@ -79,9 +79,7 @@ using namespace reco;
 //
 // constructors and destructor
 //
-BremFilter::BremFilter(const edm::ParameterSet& iConfig):
-  caloTopologyToken_(esConsumes()),
-  caloGeometryToken_(esConsumes())
+BremFilter::BremFilter(const edm::ParameterSet& iConfig)
 {
 
    beamSpotToken_                = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
@@ -177,8 +175,11 @@ bool BremFilter::filter(edm::Event& ev, const edm::EventSetup& iSetup)
        return false;
    }
 
-   topology = &iSetup.getData(caloTopologyToken_);
-   geometry = &iSetup.getData(caloGeometryToken_);  
+   iSetup.get<CaloTopologyRecord>().get(caloTopology);
+   topology = caloTopology.product();
+
+   iSetup.get<CaloGeometryRecord>().get(caloGeometry);
+   geometry = caloGeometry.product(); 
    
    collectionElectrons = electrons.product(); 
    collectionPhotons = photons.product();

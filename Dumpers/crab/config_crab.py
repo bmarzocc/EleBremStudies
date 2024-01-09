@@ -9,7 +9,7 @@ from WMCore.Configuration import Configuration
 config = Configuration()
 
 config.section_('General')
-config.General.requestName       = 'DoubleMuonLowMass_Run2018A-UL2018_MiniAODv2_GT36-v1'
+config.General.requestName       = 'EGamma_Run2018A-UL2018_MiniAODv2_GT36-v1'
 config.General.transferLogs      = True
 config.General.transferOutputs   = True
 
@@ -17,11 +17,11 @@ config.section_('JobType')
 config.JobType.pluginName        = 'Analysis'
 
 # Name of the CMSSW configuration file
-#config.JobType.psetName          = 'BremDumper_Data_MiniAODv2_GT36_fromRaw.py'
-config.JobType.psetName          = 'BremDumper_cfg.py'
-#config.JobType.priority          = 30
-#config.JobType.maxMemoryMB       = 5500
-#config.JobType.numCores          = 4
+config.JobType.psetName          = 'BremDumper_Data_MiniAODv2_GT36_fromRaw.py'
+#config.JobType.psetName          = 'BremDumper_cfg.py'
+config.JobType.priority          = 30
+config.JobType.maxMemoryMB       = 5500
+config.JobType.numCores          = 4
 config.JobType.inputFiles        = ['Cert_314472-325175_13TeV_Legacy2018_Collisions18_JSON.txt'] 
 config.JobType.outputFiles       = ['output.root']
 config.JobType.allowUndistributedCMSSW = True
@@ -30,8 +30,8 @@ config.JobType.disableAutomaticOutputCollection = True
 config.section_('Data')
 # This string determines the primary dataset of the newly-produced outputs.
 
-#config.Data.inputDataset          = '/EGamma/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.secondaryInputDataset = '/EGamma/Run2018A-v1/RAW'
+config.Data.inputDataset          = '/EGamma/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
+config.Data.secondaryInputDataset = '/EGamma/Run2018A-v1/RAW'
 
 #config.Data.inputDataset          = '/EGamma/Run2018B-UL2018_MiniAODv2_GT36-v1/MINIAOD'
 #config.Data.secondaryInputDataset = '/EGamma/Run2018B-v1/RAW'
@@ -39,36 +39,8 @@ config.section_('Data')
 #config.Data.inputDataset          = '/EGamma/Run2018C-UL2018_MiniAODv2_GT36-v1/MINIAOD'
 #config.Data.secondaryInputDataset = '/EGamma/Run2018C-v1/RAW'
 
-#config.Data.inputDataset          = '/EGamma/Run2018D-UL2018_MiniAODv2_GT36-v2/MINIAOD'
+#config.Data.inputDataset          = '/EGamma/Run2018D-UL2018_MiniAODv2_GT36-v3/MINIAOD'
 #config.Data.secondaryInputDataset = '/EGamma/Run2018D-v1/RAW'
-
-#config.Data.inputDataset         = '/MuonEG/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/MuonEG/Run2018B-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/MuonEG/Run2018C-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/MuonEG/Run2018D-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-
-#config.Data.inputDataset         = '/JetHT/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/JetHT/Run2018B-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/JetHT/Run2018C-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/JetHT/Run2018D-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-
-#config.Data.inputDataset         = '/MET/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/MET/Run2018B-UL2018_MiniAODv2-v2/MINIAOD'
-#config.Data.inputDataset         = '/MET/Run2018C-UL2018_MiniAODv2-v1/MINIAOD'
-#config.Data.inputDataset         = '/MET/Run2018D-UL2018_MiniAODv2-v1/MINIAOD'
-
-#config.Data.inputDataset         = '/SingleMuon/Run2018A-UL2018_MiniAODv2_GT36-v2/MINIAOD'
-#config.Data.inputDataset         = '/SingleMuon/Run2018B-UL2018_MiniAODv2_GT36-v2/MINIAOD'
-#config.Data.inputDataset         = '/SingleMuon/Run2018C-UL2018_MiniAODv2_GT36-v3/MINIAOD'
-#config.Data.inputDataset         = '/SingleMuon/Run2018D-UL2018_MiniAODv2_GT36-v2/MINIAOD'
-
-#config.Data.inputDataset         = '/DoubleMuon/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/DoubleMuon/Run2018B-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/DoubleMuon/Run2018C-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-#config.Data.inputDataset         = '/DoubleMuon/Run2018D-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-
-#config.Data.inputDataset         = '/DoubleMuon/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
-config.Data.inputDataset         = '/DoubleMuonLowMass/Run2018A-UL2018_MiniAODv2_GT36-v1/MINIAOD'
 
 config.Data.inputDBS             = 'global'   
 #config.Data.inputDBS             = 'phys03'   

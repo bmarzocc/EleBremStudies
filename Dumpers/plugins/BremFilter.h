@@ -35,7 +35,7 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/EgammaCandidates/interface/Conversion.h"
 #include "DataFormats/EgammaCandidates/interface/ConversionFwd.h"
-#include "CommonTools/Egamma/interface/ConversionTools.h" 
+#include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 
 #include "DataFormats/Math/interface/deltaR.h"
 
@@ -97,8 +97,8 @@ class BremFilter : public edm::stream::EDFilter<>
       std::vector<int> getCloseMuons(const pat::Electron* iElectron, const std::vector<pat::Muon>* muons, const CaloGeometry* geometry);
       
       // ----------collection tokens-------------------
-      edm::ESGetToken<CaloTopology, CaloTopologyRecord> caloTopologyToken_;
-      edm::ESGetToken<CaloGeometry, CaloGeometryRecord> caloGeometryToken_;
+      edm::ESHandle<CaloTopology> caloTopology;
+      edm::ESHandle<CaloGeometry> caloGeometry;
       edm::EDGetTokenT<reco::BeamSpot> beamSpotToken_; 
       edm::EDGetTokenT<reco::ConversionCollection> conversionsToken_;
       edm::EDGetTokenT<std::vector<pat::Electron> > electronToken_;

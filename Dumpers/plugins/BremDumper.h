@@ -70,13 +70,14 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/EgammaCandidates/interface/Conversion.h"
 #include "DataFormats/EgammaCandidates/interface/ConversionFwd.h"
-#include "CommonTools/Egamma/interface/ConversionTools.h" 
+#include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 #include "RecoEgamma/EgammaElectronAlgos/interface/ElectronHcalHelper.h"
 #include "RecoEgamma/EgammaTools/interface/EnergyScaleCorrection.h"
 #include "DataFormats/CaloRecHit/interface/CaloCluster.h"
 #include "DataFormats/ParticleFlowReco/interface/PFCluster.h"
 
 #include "RecoEcal/EgammaCoreTools/interface/PositionCalc.h"
+#include "RecoParticleFlow/PFClusterTools/interface/PFClusterWidthAlgo.h"
 #include "Calibration/Tools/interface/EcalRingCalibrationTools.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/Math/interface/libminifloat.h"
@@ -152,8 +153,9 @@ class BremDumper : public edm::one::EDAnalyzer<edm::one::SharedResources>
    
       
       // ----------collection tokens-------------------
-      edm::ESGetToken<CaloTopology, CaloTopologyRecord> caloTopologyToken_;
-      edm::ESGetToken<CaloGeometry, CaloGeometryRecord> caloGeometryToken_;
+      edm::ESHandle<EcalLaserDbService> pLaser;
+      edm::ESHandle<CaloTopology> caloTopology;
+      edm::ESHandle<CaloGeometry> caloGeometry;
       edm::ESGetToken<EcalLaserDbService, EcalLaserDbRecord> laserToken_;
       edm::ESGetToken<EcalLaserAlphas, EcalLaserAlphasRcd> alphaToken_;
       edm::ESGetToken<EcalLaserAPDPNRatios, EcalLaserAPDPNRatiosRcd> APDPNRatiosToken_;
@@ -175,7 +177,7 @@ class BremDumper : public edm::one::EDAnalyzer<edm::one::SharedResources>
 
       const CaloTopology* topology;
       const CaloGeometry* geometry; 
-      const EcalLaserDbService* laser; 
+      const EcalADCToGeVConstant* adcToGeV;
       const EcalLaserAlphas* laserAlpha;
       const EcalLaserAPDPNRatios* laserRatio;
       const EcalRecHitCollection* collectionRecHitsEB;

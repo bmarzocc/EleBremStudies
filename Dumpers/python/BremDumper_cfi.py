@@ -20,7 +20,7 @@ BremDumper = cms.EDAnalyzer("BremDumper",
     jetCollection                = cms.InputTag("slimmedJets","","PAT"), 
     muonCollection               = cms.InputTag("slimmedMuons","","PAT"), 
 
-    rereco                       = cms.bool(False), #run ReReco
+    rereco                       = cms.bool(True), #run ReReco
     debug                        = cms.bool(False), #debug
     doCompression                = cms.bool(True), #do the compression of floats
     nBits                        = cms.int32(23), #nbits for float compression (<=23) 

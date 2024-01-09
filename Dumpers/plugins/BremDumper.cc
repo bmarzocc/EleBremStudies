@@ -67,14 +67,14 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/EgammaCandidates/interface/Conversion.h"
 #include "DataFormats/EgammaCandidates/interface/ConversionFwd.h"
-#include "CommonTools/Egamma/interface/ConversionTools.h" 
+#include "RecoEgamma/EgammaTools/interface/ConversionTools.h"
 #include "RecoEgamma/EgammaElectronAlgos/interface/ElectronHcalHelper.h"
 #include "RecoEgamma/EgammaTools/interface/EnergyScaleCorrection.h"
 #include "DataFormats/CaloRecHit/interface/CaloCluster.h"
 #include "DataFormats/ParticleFlowReco/interface/PFCluster.h"
 
 #include "RecoEcal/EgammaCoreTools/interface/PositionCalc.h"
-#include "CommonTools/ParticleFlow/interface/PFClusterWidthAlgo.h"
+#include "RecoParticleFlow/PFClusterTools/interface/PFClusterWidthAlgo.h"
 #include "Calibration/Tools/interface/EcalRingCalibrationTools.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/Math/interface/libminifloat.h"
@@ -124,12 +124,7 @@ using namespace reco;
 //
 // constructors and destructor
 //
-BremDumper::BremDumper(const edm::ParameterSet& iConfig):
-  caloTopologyToken_(esConsumes()),
-  caloGeometryToken_(esConsumes()),
-  laserToken_(esConsumes()),
-  alphaToken_(esConsumes()),
-  APDPNRatiosToken_(esConsumes()) 
+BremDumper::BremDumper(const edm::ParameterSet& iConfig)
 {
    usesResource(TFileService::kSharedResource);
 
@@ -367,14 +362,24 @@ void BremDumper::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
        return;
    }
 
-   laser = &iSetup.getData(laserToken_); 
-   laserAlpha = &iSetup.getData(alphaToken_);
-   laserRatio = &iSetup.getData(APDPNRatiosToken_);
-   topology = &iSetup.getData(caloTopologyToken_);
-   geometry = &iSetup.getData(caloGeometryToken_);  
-   ebGeom_ = geometry->getSubdetectorGeometry(DetId::Ecal, EcalBarrel);
-   eeGeom_ = geometry->getSubdetectorGeometry(DetId::Ecal, EcalEndcap);
-   esGeom_ = geometry->getSubdetectorGeometry(DetId::Ecal, EcalPreshower);
+   if(!isMC_) iSetup.get<EcalLaserDbRecord>().get(pLaser); 
+
+   edm::ESHandle<EcalLaserAlphas> pAlpha;
+   iSetup.get<EcalLaserAlphasRcd>().get(pAlpha);
+   laserAlpha = pAlpha.product();
+   
+   edm::ESHandle<EcalLaserAPDPNRatios> pAPDPNRatios;
+   iSetup.get<EcalLaserAPDPNRatiosRcd>().get(pAPDPNRatios); 
+   laserRatio = pAPDPNRatios.product(); 
+
+   iSetup.get<CaloTopologyRecord>().get(caloTopology);
+   topology = caloTopology.product();
+
+   iSetup.get<CaloGeometryRecord>().get(caloGeometry);
+   geometry = caloGeometry.product();
+   ebGeom_ = caloGeometry->getSubdetectorGeometry(DetId::Ecal, EcalBarrel);
+   eeGeom_ = caloGeometry->getSubdetectorGeometry(DetId::Ecal, EcalEndcap);
+   esGeom_ = caloGeometry->getSubdetectorGeometry(DetId::Ecal, EcalPreshower);
    EcalRingCalibrationTools::setCaloGeometry(&(*geometry));
    
    collectionRecHitsEB = recHitsEB.product();
@@ -769,7 +774,7 @@ void BremDumper::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
            if(isMC_){ 
              laserCorr = pow(apdpn,-alpha);
            }else{  
-             laserCorr = laser->getLaserCorrection(hitsAndEnergies.at(i).first, ev.time());
+             laserCorr = pLaser->getLaserCorrection(hitsAndEnergies.at(i).first, ev.time());
            }
            laserCorr = pow(laserCorr,-1./alpha);
            averageLaserCorr += energy*laserCorr; 
@@ -789,7 +794,7 @@ void BremDumper::analyze(const edm::Event& ev, const edm::EventSetup& iSetup)
            if(isMC_){ 
              laserCorr = pow(apdpn,-alpha);
            }else{  
-             laserCorr = laser->getLaserCorrection(hitsAndEnergies.at(i).first, ev.time());
+             laserCorr = pLaser->getLaserCorrection(hitsAndEnergies.at(i).first, ev.time());
            }
            laserCorr = pow(laserCorr,-1./alpha);
            averageLaserCorr += energy*laserCorr; 
